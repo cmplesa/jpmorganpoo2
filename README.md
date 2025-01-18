@@ -1,34 +1,95 @@
-# Project Assignment POO  - J. POO Morgan - Phase One
+# J. POO Morgan Chase & Co. - Etapa 1
 
-![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dibmZueTVmbGNoY2kxcDlkdHpsd3hvNDA5ZTRleHcwMzRxM2x0OSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lJEGgG5ajs4zC/giphy.gif)
+## Student realizator
+- **Plesa Marian-Cosmin**
 
-#### Assignment Link: [https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/2024/proiect-etapa2](https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/2024/proiect-etapa2)
 
-## Skel Structure
+## Arhitectura Proiectului
 
-* src/
-    * checker/ - checker files
-    * fileio/ - contains classes used to read data from the json files
-    * main/
-        * Main - the Main class runs the checker on your implementation. Add the entry point to your implementation in it. Run Main to test your implementation from the IDE or from command line.
-        * Test - run the main method from Test class with the name of the input file from the command line and the result will be written
-          to the out.txt file. Thus, you can compare this result with ref.
-* input/ - contains the tests in JSON format
-* ref/ - contains all reference output for the tests in JSON format
+### Pachete
 
-## Tests
+- **`account`**:
+    - Găzduiește entitățile asociate conturilor bancare.
+    - **Clase**:
+        - `Account`: Clasa abstractă pentru conturi.
+        - `AccountClassic`: Implementare pentru conturile clasice.
+        - `AccountSavings`: Implementare pentru conturile de economii.
+        - `AccountFactory`: Design pattern Factory pentru crearea dinamică a conturilor.
+        - `AccountBusiness`: Implementare pentru conturile business.
 
-Tests Basic 1 - 10: Infrastructure \
-Tests Functional 11 - 17: Advanced \
-Tests Flow 18 - 20: Large Input
+- **`Components`**:
+    - Entități principale folosite în operațiuni.
+    - **Clase**:
+        - `Bank`: Gestionarea generală a băncii.
+        - `Card`: Reprezentarea cardurilor.
+        - `ExchangeRate`: Gestionarea cursurilor valutare.
+        - `Pair`: Pereche generică pentru mapări.
+        - `User`: Reprezentarea utilizatorilor.
+        - `BusinessComerciantPayment`: Reprezentarea plăților catre comercianți (pentru account business).
+        - `PendingSplitPayment`: Coada de așteptare pentru plăți distribuite.
+        - `Commerciant`: Reprezentarea comercianților.
 
-1. test01_user_updates - 2p
-2. test02_upgrade_plan - 2p
-3. test04_commisions - 2p
-4. test05_savings_update - 2p
-5. test06_cashback - 2p
-6. test07_simple_split_payment - 2p
-7. test08_advanced_split_payment - 2p
-8. test09_business_account_simple - 2p
-9. test10_business_account_limits - 2p
+- **`StrategyHandler`**:
+    - Conține implementările pentru design pattern-ul Strategy, gestionând comenzile utilizatorilor.
+    - **Clase**:
+        - `AcceptSplitHandler`: Implementare pentru aprobare plată distribuită.
+        - `AddAccountHandler`: Adăugarea unui cont.
+        - `AddInterestHandler`: Încasarea dobânzii pentru conturi de economii.
+        - `BusinessReportHandler`: Generarea unui raport de tipul din comanda.
+        - `CashWithdrawalHandler`: Retragerea de numerar.
+        - `ChangeDepositLimitHandler`: Modificarea limitelor de depunere.
+        - `ChangeInterestRateHandler`: Modificarea dobânzii unui cont.
+        - `ChangeSpendLimitHandler`: Modificarea limitelor de cheltuieli.
+        - `CheckCardStatusHandler`: Verificarea status-ului unui card.
+        - `CreateCardHandler`: Crearea unui card permanent.
+        - `CreateOneTimeCardHandler`: Crearea unui card de tip „one-time pay”.
+        - `DeleteAccountHandler`: Ștergerea unui cont bancar.
+        - `DeleteCardHandler`: Ștergerea unui card asociat unui cont.
+        - `DepositFundsHandler`: Depunerea de fonduri într-un cont.
+        - `PayOnlineHandler`: Gestionarea plăților online.
+        - `PrintTransactionsHandler`: Afișarea tranzacțiilor unui utilizator.
+        - `PrintUsersHandler`: Afișarea tuturor utilizatorilor și conturilor asociate.
+        - `ReportHandler`: Generarea de rapoarte generale.
+        - `SendMoneyHandler`: Transfer de bani între conturi.
+        - `SetAliasHandler`: Asignarea unui alias pentru un cont.
+        - `SetMinimumBalanceHandler`: Setarea unei balanțe minime pentru un cont.
+        - `SpendingsReportHandler`: Generarea unui raport de cheltuieli.
+        - `SplitPaymentHandler`: Gestionarea plăților distribuite între conturi.
+        - `UpgradePlanHandler`: Actualizarea planului unui cont.
+        - `WithdrawSavingsHandler`: Retragerea de fonduri dintr-un cont de economii.
+
+- **`ObserverPattern`**:
+    - Implementarea design pattern-ului Observer.
+    - **Clase**:
+        - `Observer`: Interfața pentru observatori.
+        - `Subject`: Interfața pentru subiecte.
+        - `CashbackObserver`: Observator pentru debugging in privinta cashbackului
+        - `ReportObserver`: Observator pentru creearea unui raport despre comerciant.
+
+## Design Patterns
+
+### 1. **Factory Pattern**:
+- Implementat în `AccountFactory`.
+- Permite crearea dinamică a tipurilor de conturi (`classic`, `savings`) pe baza input-ului.
+
+### 2. **Strategy Pattern**:
+- Gestionat prin pachetul `StrategyHandler`.
+- Fiecare comandă este delegată unei clase specifice care implementează
+- `CommandHandler`, oferind modularitate și ușurință în adăugarea de noi
+- funcționalități.
+
+### 3. **Singleton Pattern**:
+
+- Implementat în `Bank` si folosit pentru a asigura o singură instanță a băncii in main.
+
+### 4. **Observer Pattern**:
+
+- Implementat in ObserverPattern(un pachet special) si l-am folosit pentru debugging si 
+- pentru strangerea sumelor catre comercianti.
+
+## Feedback
+
+- O tema cu concepte foarte interesante si o complexitate buna pentru o ultima tema,
+dar putea fi realizata mult mai bine. Un potential foarte mare, care s-a cam dus
+pe apa sambetei.
 
