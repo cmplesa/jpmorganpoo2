@@ -1,0 +1,23 @@
+commit 03aed112c5c3e26303d786a2b2a954e9fd085318
+Author: cmplesa <cosmin.pl04@gmai.com>
+Date:   Sun Jan 19 00:46:26 2025 +0200
+
+    readme in
+
+commit b5ad57821847453e080bb743bdc134b3ba332aff
+Author: cmplesa <cosmin.pl04@gmai.com>
+Date:   Sun Jan 19 00:32:12 2025 +0200
+
+    homework with 4 design patterns
+
+commit 7cf2200f0588429d446a8f3e7f3fbe3de35f62d9
+Author: cmplesa <cosmin.pl04@gmai.com>
+Date:   Sat Jan 18 23:53:51 2025 +0200
+
+    homework with 2 design patterns
+
+commit 3ce1ebfa8eed3b089445e875eb3912683db565fc
+Author: cmplesa <151476582+cmplesa@users.noreply.github.com>
+Date:   Sat Jan 18 23:51:12 2025 +0200
+
+    Initial commit
