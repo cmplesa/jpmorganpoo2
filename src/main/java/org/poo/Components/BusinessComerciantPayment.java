@@ -18,5 +18,4 @@ public class BusinessComerciantPayment {
         this.managers = new ArrayList<>();
         this.totalReceived = 0;
     }
-
 }

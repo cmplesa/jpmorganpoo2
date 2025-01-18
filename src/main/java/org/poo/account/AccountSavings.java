@@ -23,7 +23,8 @@ public final class AccountSavings implements Account {
     private Integer nrOfTransactions;
     private Map<Integer, Boolean> hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy;
     private Map<String, Double> moneySpentAtCommerciantsWithCashbackStrategyThreshold;
-    private Map<String, Integer> nrOfTransactionsPerCommerciants; // the type of commercian -> the number of transactions
+    // the type of commercian -> the number of transactions
+    private Map<String, Integer> nrOfTransactionsPerCommerciants;
 
 
     /**

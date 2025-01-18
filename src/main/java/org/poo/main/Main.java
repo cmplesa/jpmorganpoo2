@@ -23,22 +23,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
 
-/**
- * The entry point to this homework. It runs the checker that tests your implementation.
- */
 public final class Main {
-    /**
-     * for coding style
-     */
     private Main() {
     }
 
-    /**
-     * DO NOT MODIFY MAIN METHOD
-     * Call the checker
-     * @param args from command line
-     * @throws IOException in case of exceptions to reading / writing
-     */
     public static void main(final String[] args) throws IOException {
         File directory = new File(CheckerConstants.TESTS_PATH);
         Path path = Paths.get(CheckerConstants.RESULT_PATH);
@@ -68,11 +56,6 @@ public final class Main {
         Checker.calculateScore();
     }
 
-    /**
-     * @param filePath1 for input file
-     * @param filePath2 for output file
-     * @throws IOException in case of exceptions to reading / writing
-     */
     public static void action(final String filePath1,
                               final String filePath2) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -80,25 +63,6 @@ public final class Main {
         ObjectInput inputData = objectMapper.readValue(file, ObjectInput.class);
 
         ArrayNode output = objectMapper.createArrayNode();
-
-        /*
-         * TODO Implement your function here
-         *
-         * How to add output to the output array?
-         * There are multiple ways to do this, here is one example:
-         *
-         * ObjectMapper mapper = new ObjectMapper();
-         *
-         * ObjectNode objectNode = mapper.createObjectNode();
-         * objectNode.put("field_name", "field_value");
-         *
-         * ArrayNode arrayNode = mapper.createArrayNode();
-         * arrayNode.add(objectNode);
-         *
-         * output.add(arrayNode);
-         * output.add(objectNode);
-         *
-         */
 
         Utils.resetRandom();
 
@@ -125,7 +89,7 @@ public final class Main {
             commerciantsList.add(commerciant);
         }
 
-        Bank bank = new Bank();
+        Bank bank = Bank.getInstance();
         CommandInput[] commandsArray = inputData.getCommands();
         ArrayList<CommandInput> commandsList = new ArrayList<>(Arrays.asList(commandsArray));
 
@@ -133,14 +97,11 @@ public final class Main {
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
+
+        // Resetarea instanței pentru testare
+        Bank.resetInstance();
     }
 
-    /**
-     * Method used for extracting the test number from the file name.
-     *
-     * @param file the input file
-     * @return the extracted numbers
-     */
     public static int fileConsumer(final File file) {
         return Integer.parseInt(
                 file.getName()

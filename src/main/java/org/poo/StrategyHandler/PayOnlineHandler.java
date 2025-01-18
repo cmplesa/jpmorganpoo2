@@ -3,13 +3,9 @@ package org.poo.StrategyHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.Components.BusinessComerciantPayment;
-import org.poo.Components.Card;
-import org.poo.Components.Commerciant;
-import org.poo.Components.ExchangeRate;
-import org.poo.Components.Pair;
-import org.poo.Components.PendingSplitPayment;
-import org.poo.Components.User;
+import org.poo.Components.*;
+import org.poo.ObserverPattern.CashbackObserver;
+import org.poo.ObserverPattern.ReportObserver;
 import org.poo.account.Account;
 import org.poo.account.AccountBusiness;
 import org.poo.fileio.CommandInput;
@@ -94,6 +90,22 @@ public final class PayOnlineHandler implements CommandHandler {
                 .filter(c -> c.getName().equals(commerciant))
                 .findFirst()
                 .orElse(null);
+
+        if (commerciantFound != null) {
+            // Înregistrează observerii
+            CashbackObserver debugObserver = new CashbackObserver();
+            ReportObserver reportObserver = new ReportObserver();
+
+            commerciantFound.registerObserver(debugObserver);
+            commerciantFound.registerObserver(reportObserver);
+
+            // Actualizează venitul și notifică observerii
+            double amountPayment2 = command.getAmount();
+            commerciantFound.addRevenue(amountPayment);
+
+            System.out.println("Venitul comerciantului " + commerciantFound.getName() +
+                    " a fost actualizat la " + commerciantFound.getRevenue());
+        }
 
         if (userPayment == null) {
             addErrorResponse(out, objectMapper, command, "User not found");

@@ -33,7 +33,6 @@ import org.poo.StrategyHandler.WithdrawSavingsHandler;
 
 import org.poo.fileio.CommandInput;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,14 +41,15 @@ import java.util.Map;
  * Represents a bank that handles various banking operations.
  */
 public final class Bank {
+    private static Bank instance;
+
     private final ArrayList<User> users;
     private final ArrayList<ExchangeRate> exchangeRates;
     private final ArrayList<CommandInput> commands;
     private final Map<String, CommandHandler> commandHandlers;
     private final ArrayList<PendingSplitPayment> pendingSplitPayments = new ArrayList<>();
 
-
-    public Bank() {
+    private Bank() {
         this.users = new ArrayList<>();
         this.exchangeRates = new ArrayList<>();
         this.commands = new ArrayList<>();
@@ -58,15 +58,15 @@ public final class Bank {
         initializeHandlers(users, exchangeRates, commands);
     }
 
-    public Bank(final ArrayList<User> usersList,
-                final ArrayList<ExchangeRate> exchangeRatesList,
-                final ArrayList<CommandInput> commandsList) {
-        this.users = usersList;
-        this.exchangeRates = exchangeRatesList;
-        this.commands = commandsList;
-        this.commandHandlers = new HashMap<>();
+    public static Bank getInstance() {
+        if (instance == null) {
+            instance = new Bank();
+        }
+        return instance;
+    }
 
-        initializeHandlers(usersList, exchangeRatesList, commandsList);
+    public static void resetInstance() {
+        instance = null;
     }
 
     private void initializeHandlers(final ArrayList<User> usersList,

@@ -20,7 +20,7 @@ public final class AccountClassic implements Account {
     private ArrayList<Card> cards;
     private String alias;
     private double minimumBalance;
-    private Map<String, Integer> nrOfTransactionsPerCommerciants; // the type of commercian -> the number of transactions
+    private Map<String, Integer> nrOfTransactionsPerCommerciants;
     private Map<Integer, Boolean> hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy;
     private Map<String, Double> moneySpentAtCommerciantsWithCashbackStrategyThreshold;
 
@@ -118,7 +118,8 @@ public final class AccountClassic implements Account {
      */
     @Override
     public void updateCashbackStatus(int nrOfTransactions) {
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(nrOfTransactions, true);
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(nrOfTransactions, true);
     }
 
     /**

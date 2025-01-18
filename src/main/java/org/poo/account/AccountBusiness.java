@@ -35,7 +35,7 @@ public final class AccountBusiness implements Account {
     private Map<String, String> associates; // Email -> Role (owner, manager, employee)
     private double depositLimit;
     private double spendingLimit;
-    // the type of commercian -> the number of transactions
+    // the type of commerciant -> the number of transactions
     private Map<String, Integer> nrOfTransactionsPerCommerciants;
     @Setter
     private Integer nrOfTransactions;
@@ -83,6 +83,13 @@ public final class AccountBusiness implements Account {
         this.depositLimit = convertCurrency("RON", currency, DEPOSIT_LIMIT_RON, exchangeRates);
     }
 
+    /**
+     * Adds an associate to the account.
+     *
+     * @param email the email of the associate
+     * @param role the role of the associate
+     * @param ownerEmail the email of the owner
+     */
     public void addAssociate(final String email, final String role, final String ownerEmail) {
         if (!associates.containsKey(ownerEmail) || !associates.get(ownerEmail).equals("owner")) {
             throw new IllegalArgumentException("Only the owner can add new associates.");
@@ -93,6 +100,12 @@ public final class AccountBusiness implements Account {
         associates.put(email, role.toLowerCase());
     }
 
+    /**
+     * Sets the minimum balance for the account.
+     *
+     * @param amount the minimum balance amount
+     * @param ownerEmail the email of the owner
+     */
     public void setMinimumBalance(final double amount, final String ownerEmail) {
         if (!associates.containsKey(ownerEmail) || !associates.get(ownerEmail).equals("owner")) {
             throw new IllegalArgumentException("Only the owner can set the minimum balance.");
@@ -100,6 +113,11 @@ public final class AccountBusiness implements Account {
         this.minimumBalance = amount;
     }
 
+    /**
+     * Deletes the account.
+     *
+     * @param ownerEmail the email of the owner
+     */
     public void deleteAccount(final String ownerEmail) {
         if (!associates.containsKey(ownerEmail) || !associates.get(ownerEmail).equals("owner")) {
             throw new IllegalArgumentException("Only the owner can delete the account.");
@@ -115,6 +133,12 @@ public final class AccountBusiness implements Account {
         this.balance += amount;
     }
 
+    /**
+     * Deposits an amount to the account by an associate.
+     *
+     * @param amount the amount to deposit
+     * @param email the email of the associate
+     */
     public void deposit(final double amount, final String email) {
         if (amount > this.depositLimit && this.associates.get(email).equals("employee")) {
             return;
@@ -154,11 +178,11 @@ public final class AccountBusiness implements Account {
     /**
      * Updates the cashback status based on the number of transactions.
      *
-     * @param nrOfTransactions the number of transactions
+     * @param transactions the number of transactions
      */
-    public void updateCashbackStatus(final int nrOfTransactions) {
+    public void updateCashbackStatus(final int transactions) {
         this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
-                put(nrOfTransactions, true);
+                put(transactions, true);
     }
 
     /**

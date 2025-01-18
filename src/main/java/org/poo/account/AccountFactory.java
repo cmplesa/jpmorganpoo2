@@ -19,12 +19,14 @@ public final class AccountFactory {
      *
      * @param accountType the type of the account
      * @param currency the currency of the account
-     * @param interestRate the interest rate of the account (optional, can be 0 for non-savings accounts)
+     * @param interestRate the interest rate of the account
+     *                     (optional, can be 0 for non-savings accounts)
      * @return the created account
      * @throws IllegalArgumentException if the account type is unknown
      */
     public static Account createAccount(final String accountType, final String currency,
-                                        final double interestRate, final String email, ArrayList<ExchangeRate> exchangeRates) {
+                                        final double interestRate, final String email,
+                                        final ArrayList<ExchangeRate> exchangeRates) {
         switch (accountType.toLowerCase()) {
             case "classic":
                 return new AccountClassic(currency);
