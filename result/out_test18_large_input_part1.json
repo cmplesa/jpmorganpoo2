@@ -3612,7 +3612,7 @@
       } ]
     }, {
       "IBAN" : "RO53POOB7122855990652257",
-      "balance" : 2.079946052597097,
+      "balance" : 2.0799460525971254,
       "currency" : "EUR",
       "type" : "business",
       "cards" : [ {
@@ -4043,7 +4043,7 @@
       } ]
     }, {
       "IBAN" : "RO53POOB7122855990652257",
-      "balance" : 2.079946052597097,
+      "balance" : 2.0799460525971254,
       "currency" : "EUR",
       "type" : "business",
       "cards" : [ {
@@ -4404,7 +4404,7 @@
   "command" : "businessReport",
   "output" : {
     "IBAN" : "RO53POOB7122855990652257",
-    "balance" : 2.079946052597097,
+    "balance" : 2.0799460525971254,
     "currency" : "EUR",
     "spending limit" : 357.0,
     "deposit limit" : 100.0,

@@ -58,6 +58,11 @@ public final class Bank {
         initializeHandlers(users, exchangeRates, commands);
     }
 
+    /**
+     * Returns the singleton instance of the Bank.
+     *
+     * @return the singleton instance of the Bank
+     */
     public static Bank getInstance() {
         if (instance == null) {
             instance = new Bank();
@@ -65,6 +70,9 @@ public final class Bank {
         return instance;
     }
 
+    /**
+     * Resets the singleton instance of the Bank.
+     */
     public static void resetInstance() {
         instance = null;
     }
@@ -110,6 +118,7 @@ public final class Bank {
      * @param rateList        The list of exchange rates.
      * @param commandList     The list of commands.
      * @param out             The JSON array to which the result will be appended.
+     * @param commerciantsList The list of commerciants.
      */
     public void banking(final ArrayList<User> usersList, final ArrayList<ExchangeRate> rateList,
                         final ArrayList<CommandInput> commandList, final ArrayNode out,

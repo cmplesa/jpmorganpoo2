@@ -13,6 +13,10 @@ import java.util.Map;
  */
 @Data
 public final class AccountSavings implements Account {
+    private static final int TRANSACTION_THRESHOLD_2 = 2;
+    private static final int TRANSACTION_THRESHOLD_5 = 5;
+    private static final int TRANSACTION_THRESHOLD_10 = 10;
+
     private String iban;
     private double balance;
     private String currency;
@@ -25,7 +29,6 @@ public final class AccountSavings implements Account {
     private Map<String, Double> moneySpentAtCommerciantsWithCashbackStrategyThreshold;
     // the type of commercian -> the number of transactions
     private Map<String, Integer> nrOfTransactionsPerCommerciants;
-
 
     /**
      * Constructs a savings account with the specified currency and interest rate.
@@ -40,10 +43,14 @@ public final class AccountSavings implements Account {
         this.interestRate = interestRate;
         this.cards = new ArrayList<>();
         this.minimumBalance = 0;
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy = new HashMap<>();
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(2, false);
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(5, false);
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(10, false);
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy =
+                new HashMap<>();
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(TRANSACTION_THRESHOLD_2, false);
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(TRANSACTION_THRESHOLD_5, false);
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(TRANSACTION_THRESHOLD_10, false);
         this.moneySpentAtCommerciantsWithCashbackStrategyThreshold = new HashMap<>();
         this.nrOfTransactionsPerCommerciants = new HashMap<>();
     }
@@ -91,11 +98,12 @@ public final class AccountSavings implements Account {
     /**
      * Updates the cashback status based on the number of transactions.
      *
-     * @param nrOfTransactions the number of transactions
+     * @param numberOfTransactions the number of transactions
      */
     @Override
-    public void updateCashbackStatus(int nrOfTransactions) {
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(nrOfTransactions, true);
+    public void updateCashbackStatus(final int numberOfTransactions) {
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(numberOfTransactions, true);
     }
 
     public Map<String, Integer> getNrOfTransactionsPerCommerciants() {

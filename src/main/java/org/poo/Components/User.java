@@ -80,15 +80,15 @@ public class User {
             return "The user already has the " + newPlanType + " plan.";
         }
 
-        if (this.type.equals(newPlanType)) {
-            return "The user already has the " + newPlanType + " plan.";
-        }
+        System.out.println("FIRST ERROR");
 
         if ((this.type.equals("silver") && (newPlanType.equals("student")
                 || newPlanType.equals("standard")))
                 || (this.type.equals("gold") && (!newPlanType.equals("gold")))) {
             return "You cannot downgrade your plan.";
         }
+
+        System.out.println("SECOND ERROR");
 
         Account account = null;
         for (Account acc : this.accounts) {
@@ -101,6 +101,8 @@ public class User {
         if (account == null) {
             return "Account not found";
         }
+
+        System.out.println("THIRD ERROR");
 
         double balance = account.getBalance();
         double balanceInRON = 0;
@@ -122,6 +124,8 @@ public class User {
             return "Insufficient funds";
         }
 
+        System.out.println("FOURTH ERROR");
+
         double feeInAccountCurrency = fee;
         if (!account.getCurrency().equals("RON")) {
             feeInAccountCurrency = convertCurrency("RON",
@@ -132,8 +136,11 @@ public class User {
         }
 
         account.setBalance(account.getBalance() - feeInAccountCurrency);
+        this.setType(newPlanType);
+        System.out.println("new: " + this.getType());
+        System.out.println("TIMEYSTAP: " + timestamp);
 
-        this.type = newPlanType;
+
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Add transaction to the user's list of transactions

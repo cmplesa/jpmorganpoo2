@@ -128,4 +128,6 @@ public interface Account {
      * @return a map of commerciant names to the money spent
      */
     Map<String, Double> getMoneySpentAtCommerciantsWithCashbackStrategyThreshold();
+
+    Map<Integer, Boolean> getHasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy();
 }

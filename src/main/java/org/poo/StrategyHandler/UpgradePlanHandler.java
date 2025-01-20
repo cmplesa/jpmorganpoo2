@@ -48,6 +48,7 @@ public class UpgradePlanHandler implements CommandHandler {
             }
         }
 
+
         if (user == null) {
             ObjectNode output = out.addObject();
             output.put("command", "upgradePlan");
@@ -57,6 +58,10 @@ public class UpgradePlanHandler implements CommandHandler {
             output.put("timestamp", timestamp);
             return;
         }
+        System.out.println("***TIMESTAMP  FOR UPGRADES***" + timestamp);
+        System.out.println("user: " + user.getEmail());
+        System.out.println("plan: " + user.getType());
+        System.out.println("***TIMESTAMP FOR UPGRADES***" + timestamp);
 
         double fee = 0.0;
         switch (newPlanType) {

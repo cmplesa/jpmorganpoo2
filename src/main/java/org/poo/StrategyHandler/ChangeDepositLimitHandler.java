@@ -59,7 +59,10 @@ public final class ChangeDepositLimitHandler implements CommandHandler {
             }
         }
 
-        if (timestamp == OWNER_TIMESTAMP) {
+        AccountBusiness account = findBusinessAccountByIBAN(user, accountIBAN);
+        System.out.println(account + " timestamp: " + command.getTimestamp());
+
+        if (account == null) {
             ObjectNode response = mapper.createObjectNode();
             response.put("command", command.getCommand());
             ObjectNode output = mapper.createObjectNode();
@@ -68,13 +71,6 @@ public final class ChangeDepositLimitHandler implements CommandHandler {
             response.set("output", output);
             response.put("timestamp", timestamp);
             out.add(response);
-            return;
-        }
-
-        AccountBusiness account = findBusinessAccountByIBAN(user, accountIBAN);
-        System.out.println(account + " timestamp: " + command.getTimestamp());
-        if (account == null) {
-            addErrorResponse(out, mapper, "Account not found or not a business account", timestamp);
             return;
         }
 

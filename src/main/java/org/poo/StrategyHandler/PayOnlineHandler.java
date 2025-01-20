@@ -96,15 +96,15 @@ public final class PayOnlineHandler implements CommandHandler {
             CashbackObserver debugObserver = new CashbackObserver();
             ReportObserver reportObserver = new ReportObserver();
 
-            commerciantFound.registerObserver(debugObserver);
-            commerciantFound.registerObserver(reportObserver);
+//            commerciantFound.registerObserver(debugObserver);
+//            commerciantFound.registerObserver(reportObserver);
 
             // Actualizează venitul și notifică observerii
             double amountPayment2 = command.getAmount();
             commerciantFound.addRevenue(amountPayment);
 
-            System.out.println("Venitul comerciantului " + commerciantFound.getName() +
-                    " a fost actualizat la " + commerciantFound.getRevenue());
+//            System.out.println("Venitul comerciantului " + commerciantFound.getName() +
+//                    " a fost actualizat la " + commerciantFound.getRevenue());
         }
 
         if (userPayment == null) {
@@ -227,6 +227,11 @@ public final class PayOnlineHandler implements CommandHandler {
         }
 
         double cashback = ZERO_AMOUNT;
+        double cashbackNenorocit = ZERO_AMOUNT;
+
+        System.out.println("/n");
+
+        User userPaymentTemp = userPayment;
 
         // Implementing the nrOfTransactions strategy
         if ("nrOfTransactions".equals(cashbackStrategy)) {
@@ -242,17 +247,23 @@ public final class PayOnlineHandler implements CommandHandler {
             }
 
             if (nrOfTransactions == FOOD_TRANSACTION_THRESHOLD
-                    && "Food".equals(commerciantFound.getType())) {
+                    && "Food".equals(commerciantFound.getType()) &&
+                    accountToPay.getHasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy().
+                            get(FOOD_TRANSACTION_THRESHOLD) == false) {
                 // 2 / 100.0 => PERCENT_2 / DIVISOR_100
                 cashback = (PERCENT_2 / DIVISOR_100) * convertedAmount;
                 accountToPay.updateCashbackStatus(FOOD_TRANSACTION_THRESHOLD);
             } else if (nrOfTransactions == CLOTHES_TRANSACTION_THRESHOLD
-                    && "Clothes".equals(commerciantFound.getType())) {
+                    && "Clothes".equals(commerciantFound.getType()) &&
+                    accountToPay.getHasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy().
+                            get(CLOTHES_TRANSACTION_THRESHOLD) == false) {
                 // 5 / 100.0 => PERCENT_5 / DIVISOR_100
                 cashback = (PERCENT_5 / DIVISOR_100) * convertedAmount;
                 accountToPay.updateCashbackStatus(CLOTHES_TRANSACTION_THRESHOLD);
             } else if (nrOfTransactions == TECH_TRANSACTION_THRESHOLD
-                    && "Tech".equals(commerciantFound.getType())) {
+                    && "Tech".equals(commerciantFound.getType()) && accountToPay.
+                    getHasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy().
+                    get(TECH_TRANSACTION_THRESHOLD) == false) {
                 // 0.1 => TECH_CASHBACK_RATE
                 cashback = TECH_CASHBACK_RATE * convertedAmount;
                 accountToPay.updateCashbackStatus(TECH_TRANSACTION_THRESHOLD);
@@ -270,19 +281,68 @@ public final class PayOnlineHandler implements CommandHandler {
                 totalSpent += amount;
             }
 
+            if (accountToPay.getAccountType().equals("business")) {
+                User userNenorocit = null;
+                for (User u : users) {
+                    for (Account account : u.getAccounts()) {
+                        if (account.getIBAN().equals(accountToPay.getIBAN())) {
+                            userNenorocit = u;
+                            break;
+                        }
+                    }
+                    if (userNenorocit != null) {
+                        break;
+                    }
+                }
+                userPayment = userNenorocit;
+            }
+
+            String commerciant2 = "";
+            for (Map.Entry<String, Integer> entry : accountToPay.
+                    getNrOfTransactionsPerCommerciants().entrySet()) {
+                String comm = entry.getKey();
+                Integer transactions = entry.getValue();
+                    if (transactions == FOOD_TRANSACTION_THRESHOLD
+                            && "Food".equals(commerciantFound.getType()) &&
+                            accountToPay.getHasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy().
+                                    get(FOOD_TRANSACTION_THRESHOLD) == false) {
+                        // 2 / 100.0 => PERCENT_2 / DIVISOR_100
+                        cashbackNenorocit = (PERCENT_2 / DIVISOR_100) * convertedAmount;
+                        accountToPay.updateCashbackStatus(FOOD_TRANSACTION_THRESHOLD);
+                    } else if (transactions == CLOTHES_TRANSACTION_THRESHOLD
+                            && "Clothes".equals(commerciantFound.getType())
+                            && accountToPay.getHasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy()
+                                    .get(CLOTHES_TRANSACTION_THRESHOLD) == false) {
+                        // 5 / 100.0 => PERCENT_5 / DIVISOR_100
+                        cashbackNenorocit = (PERCENT_5 / DIVISOR_100) * convertedAmount;
+                        accountToPay.updateCashbackStatus(CLOTHES_TRANSACTION_THRESHOLD);
+                    } else if (transactions == TECH_TRANSACTION_THRESHOLD
+                            && "Tech".equals(commerciantFound.getType())
+                            && accountToPay.getHasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy().
+                                    get(TECH_TRANSACTION_THRESHOLD) == false) {
+                        // 0.1 => TECH_CASHBACK_RATE
+                        cashbackNenorocit = TECH_CASHBACK_RATE * convertedAmount;
+                        accountToPay.updateCashbackStatus(TECH_TRANSACTION_THRESHOLD);
+                    }
+            }
+
+
             double convertedAmountInRon = convertCurrency(accountToPay.getCurrency(),
                     "RON", convertedAmount, exchangeRates);
             totalSpent += convertedAmountInRon;
 
+            System.out.println("total spent: " + totalSpent);
             accountToPay.getMoneySpentAtCommerciantsWithCashbackStrategyThreshold()
                     .put(commerciant, totalSpent);
 
             String userType = userPayment.getType();
+
             if (totalSpent >= THRESHOLD_500) {
                 if ("standard".equals(userType) || "student".equals(userType)) {
                     cashback = (RATE_025 / DIVISOR_100) * convertedAmount; // 0.25/100 => 0.0025
                 } else if ("silver".equals(userType)) {
                     cashback = (RATE_05 / DIVISOR_100) * convertedAmount;  // 0.5/100 => 0.005
+
                 } else if ("gold".equals(userType)) {
                     cashback = (RATE_07 / DIVISOR_100) * convertedAmount;  // 0.7/100 => 0.007
                 }
@@ -323,7 +383,10 @@ public final class PayOnlineHandler implements CommandHandler {
         }
 
         // Update the account balance
-        accountToPay.setBalance(accountToPay.getBalance() - convertedAmount - taxes + cashback);
+        accountToPay.setBalance(accountToPay.getBalance() - convertedAmount - taxes + cashback + cashbackNenorocit);
+
+        System.out.println("new account balance: " + accountToPay.getBalance());
+        System.out.println("/n");
 
         // If business account, track spending
         if ("business".equals(accountToPay.getAccountType())) {
@@ -338,7 +401,8 @@ public final class PayOnlineHandler implements CommandHandler {
             String role2 = businessAccount.getAssociates().get(emailPayment);
             if (role2 != null && !"owner".equals(role2)) {
                 payment.setTotalReceived(payment.getTotalReceived() + convertedAmount);
-                String fullName = userPayment.getLastName() + " " + userPayment.getFirstName();
+                String fullName = userPaymentTemp.getLastName()
+                        + " " + userPaymentTemp.getFirstName();
                 if ("employee".equals(role2)) {
                     payment.getEmployees().add(fullName);
                 } else if ("manager".equals(role2)) {
@@ -349,8 +413,8 @@ public final class PayOnlineHandler implements CommandHandler {
             businessAccount.getCommerciantsPayments().put(commerciant, payment);
         }
 
-        debugMethod1(accountToPay);
-        debugMethod2(accountToPay);
+//        debugMethod1(accountToPay);
+//        debugMethod2(accountToPay);
         addPaymentDetails(objectMapper, command, userPayment, convertedAmount,
                 commerciant, accountToPay);
 

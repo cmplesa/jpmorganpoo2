@@ -1,7 +1,6 @@
 package org.poo.account;
 
 import lombok.Data;
-import lombok.Setter;
 import org.poo.Components.Card;
 import org.poo.utils.Utils;
 
@@ -14,6 +13,10 @@ import java.util.Map;
  */
 @Data
 public final class AccountClassic implements Account {
+    private static final int TRANSACTION_THRESHOLD_2 = 2;
+    private static final int TRANSACTION_THRESHOLD_5 = 5;
+    private static final int TRANSACTION_THRESHOLD_10 = 10;
+
     private String iban;
     private double balance;
     private String currency;
@@ -30,7 +33,6 @@ public final class AccountClassic implements Account {
     public AccountClassic() {
     }
 
-
     /**
      * Constructs a classic account with the specified currency.
      *
@@ -42,10 +44,14 @@ public final class AccountClassic implements Account {
         this.currency = currency;
         this.cards = new ArrayList<>();
         this.minimumBalance = 0;
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy = new HashMap<>();
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(2, false);
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(5, false);
-        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.put(10, false);
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy =
+                new HashMap<>();
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(TRANSACTION_THRESHOLD_2, false);
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(TRANSACTION_THRESHOLD_5, false);
+        this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
+                put(TRANSACTION_THRESHOLD_10, false);
         this.moneySpentAtCommerciantsWithCashbackStrategyThreshold = new HashMap<>();
         this.nrOfTransactionsPerCommerciants = new HashMap<>();
     }
@@ -117,7 +123,7 @@ public final class AccountClassic implements Account {
      * @param nrOfTransactions the number of transactions
      */
     @Override
-    public void updateCashbackStatus(int nrOfTransactions) {
+    public void updateCashbackStatus(final int nrOfTransactions) {
         this.hasReceivedCashbackFromCommerciantsWithNrOfTransactionsStrategy.
                 put(nrOfTransactions, true);
     }
@@ -131,5 +137,4 @@ public final class AccountClassic implements Account {
     public Map<String, Double> getMoneySpentAtCommerciantsWithCashbackStrategyThreshold() {
         return this.moneySpentAtCommerciantsWithCashbackStrategyThreshold;
     }
-
 }
