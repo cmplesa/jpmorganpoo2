@@ -1,4 +1,4 @@
-# J. POO Morgan Chase & Co. - Etapa 1
+# J. POO Morgan Chase & Co. - Etapa 2
 
 ## Student realizator
 - **Plesa Marian-Cosmin**
